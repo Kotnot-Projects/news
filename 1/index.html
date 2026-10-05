@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔥 ШОК НОВОСТИ 🔥</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #eee;
+    min-height: 100vh;
+}
+
+header {
+    text-align: center;
+    padding: 40px 20px 20px;
+    background: rgba(0,0,0,0.3);
+    border-bottom: 3px solid #e94560;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.logo h1 {
+    font-size: 3rem;
+    background: linear-gradient(90deg, #e94560, #ffa500, #e94560);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shine 3s linear infinite;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+@keyframes shine { to { background-position: 200% center; } }
+
+.fire { font-size: 2.5rem; animation: pulse 1.5s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+
+.tagline {
+    margin-top: 10px;
+    color: #ffa500;
+    font-style: italic;
+    font-size: 1.1rem;
+}
+
+main { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+
+.news-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+}
+
+.news-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(233,69,96,0.3);
+    border-radius: 15px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.news-card:hover {
+    transform: translateY(-8px);
+    border-color: #e94560;
+    box-shadow: 0 15px 40px rgba(233,69,96,0.4);
+}
+
+.news-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 4px;
+    background: linear-gradient(90deg, #e94560, #ffa500);
+}
+
+.news-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+
+.news-card h2 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: #fff;
+    line-height: 1.3;
+}
+
+.news-card .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #aaa;
+    margin-bottom: 10px;
+}
+
+.category {
+    background: #e94560;
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.news-card p {
+    color: #ccc;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.loading, .empty {
+    text-align: center;
+    padding: 60px 20px;
+    font-size: 1.3rem;
+    color: #ffa500;
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Модалка */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+.modal.active { display: flex; align-items: center; justify-content: center; }
+
+.modal-content {
+    background: linear-gradient(135deg, #16213e, #1a1a2e);
+    border: 2px solid #e94560;
+    border-radius: 20px;
+    padding: 35px;
+    max-width: 750px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    animation: slideUp 0.4s;
+}
+
+@keyframes slideUp { from{transform:translateY(50px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+.close {
+    position: absolute;
+    top: 15px; right: 25px;
+    font-size: 2rem;
+    color: #e94560;
+    cursor: pointer;
+    transition: 0.2s;
+    line-height: 1;
+}
+
+.close:hover { color: #ffa500; transform: rotate(90deg); }
+
+.modal-content h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #fff;
+    padding-right: 40px;
+}
+
+.modal-meta {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.modal-content img {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.modal-content p {
+    line-height: 1.7;
+    color: #ddd;
+    font-size: 1.05rem;
+    white-space: pre-wrap;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <span class="fire">🔥</span>
+        <h1>ШОК НОВОСТИ</h1>
+        <span class="fire">🔥</span>
+    </div>
+    <p class="tagline">Ты не поверишь, что произошло дальше!</p>
+</header>
+
+<main>
+    <div id="loading" class="loading">Загрузка шокирующих новостей...</div>
+    <div id="news-container" class="news-container"></div>
+    <div id="empty" class="empty" style="display:none;">
+        😱 Новостей пока нет. Создай первую через <b>news_create.py</b>!
+    </div>
+</main>
+
+<footer>© Шок Новости — Все совпадения случайны 😉</footer>
+
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="modal-title"></h2>
+        <div class="modal-meta">
+            <span id="modal-date"></span>
+            <span id="modal-category" class="category"></span>
+        </div>
+        <img id="modal-image" src="" alt="" style="display:none;">
+        <p id="modal-text"></p>
+    </div>
+</div>
+
+<script>
+const container = document.getElementById('news-container');
+const loading   = document.getElementById('loading');
+const empty     = document.getElementById('empty');
+const modal     = document.getElementById('modal');
+
+async function loadNews() {
+    try {
+        const res = await fetch('news/index.json?t=' + Date.now());
+        if (!res.ok) throw new Error('Нет index.json');
+        const list = await res.json();
+
+        if (!Array.isArray(list) || list.length === 0) {
+            loading.style.display = 'none';
+            empty.style.display = 'block';
+            return;
+        }
+
+        // Загружаем все новости параллельно
+        const newsItems = await Promise.all(
+            list.map(file =>
+                fetch('news/' + file + '?t=' + Date.now())
+                    .then(r => r.ok ? r.json() : null)
+                    .catch(() => null)
+            )
+        );
+
+        const valid = newsItems.filter(n => n && n.title);
+        // Сортируем по дате (свежие сверху)
+        valid.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+        loading.style.display = 'none';
+
+        if (valid.length === 0) {
+            empty.style.display = 'block';
+            return;
+        }
+
+        valid.forEach(renderCard);
+    } catch (e) {
+        loading.textContent = '⚠️ Не удалось загрузить новости. Проверь папку news/';
+        console.error(e);
+    }
+}
+
+function renderCard(news) {
+    const card = document.createElement('div');
+    card.className = 'news-card';
+
+    const shortText = news.text
+        ? (news.text.length > 120 ? news.text.slice(0, 120) + '...' : news.text)
+        : '';
+
+    card.innerHTML = `
+        ${news.image ? `<img src="${escapeHtml(news.image)}" alt="" onerror="this.style.display='none'">` : ''}
+        <h2>${escapeHtml(news.title)}</h2>
+        <div class="meta">
+            <span>${escapeHtml(news.date || '')}</span>
+            ${news.category ? `<span class="category">${escapeHtml(news.category)}</span>` : ''}
+        </div>
+        <p>${escapeHtml(shortText)}</p>
+    `;
+
+    card.addEventListener('click', () => openModal(news));
+    container.appendChild(card);
+}
+
+function openModal(news) {
+    document.getElementById('modal-title').textContent = news.title || '';
+    document.getElementById('modal-date').textContent  = news.date || '';
+    document.getElementById('modal-category').textContent = news.category || '';
+    document.getElementById('modal-text').textContent  = news.text || '';
+
+    const img = document.getElementById('modal-image');
+    if (news.image) {
+        img.src = news.image;
+        img.style.display = 'block';
+    } else {
+        img.style.display = 'none';
+    }
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+document.querySelector('.close').addEventListener('click', closeModal);
+modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+function closeModal() {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function escapeHtml(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+loadNews();
+</script>
+
+</body>
+</html>
